@@ -31,7 +31,53 @@ Go [here](https://kwatcharasupat.github.io/bandit-demo/) for demo of selected mo
 - `python train.py expt/path-to-the-desired-experiment.yaml`.
 - `python test.py expt/path-to-the-desired-experiment.yaml --ckpt_path=path/to/checkpoint-from-training.ckpt`.
 
-## For Inference
+## Simple Inference (Recommended)
+
+A standalone inference script that doesn't require the full training infrastructure or `asteroid` dependency.
+
+### Installation
+```bash
+# Create environment
+conda create -n bandit python=3.10 -y
+conda activate bandit
+
+# Install PyTorch (adjust for your CUDA version)
+pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# Install dependencies
+pip install pytorch_lightning spafe tqdm
+```
+
+### Usage
+```bash
+python bandit_inference.py -c path/to/model.ckpt -a path/to/audio.wav -o output_dir
+```
+
+### Arguments
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `-c, --checkpoint` | Path to model checkpoint (.ckpt) | Required |
+| `-a, --audio` | Path to input audio file | Required |
+| `-o, --output` | Output directory | `<audio_dir>/separated` |
+| `--device` | Device (cuda/cpu) | `cuda` |
+| `--no-half` | Disable FP16 mixed precision | `False` |
+| `--chunk` | Chunk size in seconds | `30.0` |
+| `--overlap` | Overlap in seconds | `2.0` |
+
+### Supported Models
+- [dnr-3s-mus64-l1snr-plus.ckpt](https://zenodo.org/records/10160698) 
+- model_bandit_plus_dnr_sdr_11.47.ckpt
+- Other models with `bsrnn.` prefix and `norm/fc` structure
+
+### Performance
+Tested on RTX 4090:
+- **Speed**: ~18x realtime
+- **VRAM**: ~1.9 GB
+- **Missing keys**: 0
+
+---
+
+## For Inference (Original)
 
 - Get the checkpoints from [Zenodo](https://zenodo.org/records/10160698). 
 - Get the corresponding yaml config file from `expt`.
