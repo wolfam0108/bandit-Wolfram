@@ -45,7 +45,7 @@ conda activate bandit
 pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # Install dependencies
-pip install pytorch_lightning spafe tqdm
+pip install pytorch_lightning spafe tqdm librosa
 ```
 
 ### Usage
